@@ -15,7 +15,9 @@ type ButtonPropsWithChildren = React.PropsWithChildren<{
 // Tipo utilitário do React, que informa que pode receber qualquer propriedade que um elemento button possua por padrão
 // e ainda podemos extender essas propriedades com &
 type ButtonPropsUtilirarioButton = React.ComponentProps<'button'> & {
-  tamanho?: string
+  tamanho?: string,
+  total?: number,
+  setTotal?: React.Dispatch<React.SetStateAction<number>>;
 };
 
 // Podendo desestruturar as propriedades, tornando o componente mais reutilizável
