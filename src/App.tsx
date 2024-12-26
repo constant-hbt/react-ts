@@ -11,6 +11,7 @@ import { UiContextProvider } from './UiContext';
 import Header from './Header';
 import Content from './Content';
 import { UserContextProvider } from './UserContext';
+import Form from './Form';
 
 function user(){
   return {
@@ -137,6 +138,7 @@ function App() {
         <div>
           <Header/>
           <Content/>
+          <Form/>
           <h1>Viagem</h1>
           <p>Início: {date}</p>
           <p>Hora: {time}</p>
