@@ -7,6 +7,10 @@ import {getVendas, Venda} from './ApiVendas';
 import videoSrc from './video.mp4';
 import useLocalStorage from './useLocalStorage';
 import useFetch from './useFetch';
+import { UiContextProvider } from './UiContext';
+import Header from './Header';
+import Content from './Content';
+import { UserContextProvider } from './UserContext';
 
 function user(){
   return {
@@ -128,82 +132,88 @@ function App() {
   }, [volume]);
 
   return (
-    <div>
-      <h1>Viagem</h1>
-      <p>Início: {date}</p>
-      <p>Hora: {time}</p>
-      <p>Total: {total}</p>
-      <Button id='botao-principal' className='btn' tamanho='1.5rem' onClick={incrementar}>Incrementar</Button>
-      <Button id='botao-principal' className='btn' tamanho='1.5rem' onClick={handleClickMouseEvent}>Click</Button>
-      <Input label='TESTE' id='teste'/>
-      <Input label='DATA' id='data' type='date' value={date} onChange={(e) => setDate(e.target.value)}/>
-      <Input label='HORA' id='time' type='time' value={time} onChange={(e) => setTime(e.target.value)}/>
-      <Checkbox label='Termos e Condições'/>
-      <div>
-        {data !== null && <div>{data.nome}: {data.profissao}</div>}
-      </div>
-      <p>Total Incrementado: {totalIncrementado}</p>
-      <ButtonIncrementar incrementar={setTotalIncrementado}/>
-      <div>
-        <Input label='Data de Início' id='data-inicio' type='date' value={dataInicio} onChange={(e) => setDataInicio(e.target.value)}/>
-        <Input label='Data de Término' id='data-fim' type='date' value={dataFim} onChange={(e) => setDataFim(e.target.value)}/>
-        <p>{dataInicio}</p>
-        <p>{dataFim}</p>
-      </div>
-      <div>
-        {dataVendas.length > 0 && <div>Vendas: <ul>{dataVendas.map((venda) => <li key={venda.id}>{venda.nome}: {venda.status}</li>)}</ul></div>}
-      </div>
-      <div>
-        <div className='flex'>
-          <button onClick={() => videoRef.current?.play()}>Play</button>
-          <button onClick={() => videoRef.current?.pause()}>Pause</button>
-        </div>
-        <video src={videoSrc} controls ref={videoRef}></video>
-      </div>
-      <div style={{marginTop: '1rem'}}>
-        <div className='flex'>
-          {playing ? (
-            <button onClick={() => videoExercicio.current?.pause()}>Pause</button>
-            ) : (
-            <button onClick={() => videoExercicio.current?.play()}>Play</button>
-          )}
-          <button onClick={forward}>+2s</button>
-          <button onClick={() => changePlayBackRate(1.0)}>1x</button>
-          <button onClick={() => changePlayBackRate(2.0)}>2x</button>
-          <button onClick={pictureInPicture}>PiP</button>
-          <button onClick={mute}>M</button>
-        </div>
+    <UiContextProvider>
+      <UserContextProvider>
         <div>
-        <video src={videoSrc} controls ref={videoExercicio} onPlay={() => setPlaying(true)} onPause={() => setPlaying(false)}></video>
+          <Header/>
+          <Content/>
+          <h1>Viagem</h1>
+          <p>Início: {date}</p>
+          <p>Hora: {time}</p>
+          <p>Total: {total}</p>
+          <Button id='botao-principal' className='btn' tamanho='1.5rem' onClick={incrementar}>Incrementar</Button>
+          <Button id='botao-principal' className='btn' tamanho='1.5rem' onClick={handleClickMouseEvent}>Click</Button>
+          <Input label='TESTE' id='teste'/>
+          <Input label='DATA' id='data' type='date' value={date} onChange={(e) => setDate(e.target.value)}/>
+          <Input label='HORA' id='time' type='time' value={time} onChange={(e) => setTime(e.target.value)}/>
+          <Checkbox label='Termos e Condições'/>
+          <div>
+            {data !== null && <div>{data.nome}: {data.profissao}</div>}
+          </div>
+          <p>Total Incrementado: {totalIncrementado}</p>
+          <ButtonIncrementar incrementar={setTotalIncrementado}/>
+          <div>
+            <Input label='Data de Início' id='data-inicio' type='date' value={dataInicio} onChange={(e) => setDataInicio(e.target.value)}/>
+            <Input label='Data de Término' id='data-fim' type='date' value={dataFim} onChange={(e) => setDataFim(e.target.value)}/>
+            <p>{dataInicio}</p>
+            <p>{dataFim}</p>
+          </div>
+          <div>
+            {dataVendas.length > 0 && <div>Vendas: <ul>{dataVendas.map((venda) => <li key={venda.id}>{venda.nome}: {venda.status}</li>)}</ul></div>}
+          </div>
+          <div>
+            <div className='flex'>
+              <button onClick={() => videoRef.current?.play()}>Play</button>
+              <button onClick={() => videoRef.current?.pause()}>Pause</button>
+            </div>
+            <video src={videoSrc} controls ref={videoRef}></video>
+          </div>
+          <div style={{marginTop: '1rem'}}>
+            <div className='flex'>
+              {playing ? (
+                <button onClick={() => videoExercicio.current?.pause()}>Pause</button>
+                ) : (
+                <button onClick={() => videoExercicio.current?.play()}>Play</button>
+              )}
+              <button onClick={forward}>+2s</button>
+              <button onClick={() => changePlayBackRate(1.0)}>1x</button>
+              <button onClick={() => changePlayBackRate(2.0)}>2x</button>
+              <button onClick={pictureInPicture}>PiP</button>
+              <button onClick={mute}>M</button>
+            </div>
+            <div>
+            <video src={videoSrc} controls ref={videoExercicio} onPlay={() => setPlaying(true)} onPause={() => setPlaying(false)}></video>
+            </div>
+          </div>
+          <div>
+            Exercício de Custom Hook
+            <div className='flex'>
+              <button onClick={() => setVolume('0')}>0</button>
+              <button onClick={() => setVolume('50')}>50</button>
+              <button onClick={() => setVolume('100')}>100</button>
+            </div>
+            <p>Volume: {volume}</p>
+            <video src={videoSrc} ref={videoCustomHook} controls></video>
+          </div>
+          <div style={{marginTop: '1rem'}}>
+            <div className='flex'>
+              {produtos.data && produtos.data.map((produto) => <button key={produto.id} onClick={() => setProdutoId(produto.id)}>{produto.nome}</button>)}
+            </div>
+            <div>
+              {produto.loading && <div>Carregando...</div>}
+              {produto.data && (
+                <ul>
+                  <li>ID: {produto.data.id}</li>
+                  <li>Nome: {produto.data.nome}</li>
+                  <li>Descrição: {produto.data.descricao}</li>
+                  <li>Quantidade: {produto.data.quantidade}</li>
+                </ul>
+              )}
+            </div>
+          </div>
         </div>
-      </div>
-      <div>
-        Exercício de Custom Hook
-        <div className='flex'>
-          <button onClick={() => setVolume('0')}>0</button>
-          <button onClick={() => setVolume('50')}>50</button>
-          <button onClick={() => setVolume('100')}>100</button>
-        </div>
-        <p>Volume: {volume}</p>
-        <video src={videoSrc} ref={videoCustomHook} controls></video>
-      </div>
-      <div style={{marginTop: '1rem'}}>
-        <div className='flex'>
-          {produtos.data && produtos.data.map((produto) => <button key={produto.id} onClick={() => setProdutoId(produto.id)}>{produto.nome}</button>)}
-        </div>
-        <div>
-          {produto.loading && <div>Carregando...</div>}
-          {produto.data && (
-            <ul>
-              <li>ID: {produto.data.id}</li>
-              <li>Nome: {produto.data.nome}</li>
-              <li>Descrição: {produto.data.descricao}</li>
-              <li>Quantidade: {produto.data.quantidade}</li>
-            </ul>
-          )}
-        </div>
-      </div>
-    </div>
+      </UserContextProvider>
+    </UiContextProvider>
   )
 }
 

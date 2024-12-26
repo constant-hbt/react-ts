@@ -38,6 +38,8 @@ function useFetch<T>(url: RequestInfo | URL, options?: RequestInit): FetchState<
       }catch (error){
         if (!signal.aborted && error instanceof Error)
           setError(error.message);
+        else
+          setError('Erro não especificado ao realizar a requisição');
       }
       finally {
         if (!signal.aborted)
